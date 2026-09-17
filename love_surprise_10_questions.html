@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise ❤️</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #ffb199);
+    color: white;
+  }
+  .screen {
+    min-height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    position: relative;
+  }
+  .screen.active { display: flex; }
+  .card {
+    width: min(92vw, 560px);
+    padding: 42px 26px;
+    border-radius: 28px;
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.35);
+    box-shadow: 0 20px 60px rgba(120,20,50,.25);
+    backdrop-filter: blur(12px);
+  }
+  .heart {
+    font-size: 72px;
+    animation: pulse 1.4s infinite;
+  }
+  h1 { font-size: clamp(28px, 7vw, 48px); margin: 12px 0; }
+  p { font-size: 18px; line-height: 1.5; }
+  .buttons {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 30px;
+    position: relative;
+    min-height: 58px;
+  }
+  button {
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 34px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  #yes {
+    background: white;
+    color: #e83e6f;
+    box-shadow: 0 8px 25px rgba(0,0,0,.18);
+  }
+  #yes:hover { transform: scale(1.06); }
+  #no {
+    background: rgba(255,255,255,.22);
+    color: white;
+    border: 1px solid rgba(255,255,255,.5);
+  }
+  .message {
+    font-size: clamp(30px, 7vw, 52px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 20px 0;
+  }
+  .sub { font-size: 19px; }
+  .floating-heart {
+    position: fixed;
+    bottom: -30px;
+    font-size: 24px;
+    animation: floatUp linear forwards;
+    pointer-events: none;
+  }
+  @keyframes pulse {
+    50% { transform: scale(1.15); }
+  }
+  @keyframes floatUp {
+    to { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+  }
+
+.progress{font-size:15px;opacity:.9;margin-bottom:12px}
+.question{font-size:clamp(22px,5.5vw,31px);font-weight:700;line-height:1.3;margin:16px 0}
+.options{display:grid;gap:12px;margin-top:24px}
+.option{width:100%;border:1px solid rgba(255,255,255,.5);border-radius:18px;padding:14px 18px;font-size:17px;font-weight:bold;cursor:pointer;background:rgba(255,255,255,.18);color:white;transition:.2s}
+.option:hover{transform:scale(1.02);background:rgba(255,255,255,.3)}
+.option.correct{background:rgba(50,200,100,.55)}
+.option.wrong{background:rgba(220,50,70,.55)}
+.feedback{min-height:27px;margin-top:15px;font-weight:bold}
+.next{display:none;margin:18px auto 0;border:0;border-radius:999px;padding:13px 28px;font-size:16px;font-weight:bold;cursor:pointer;background:white;color:#e83e6f}
+.final-buttons{display:flex;gap:18px;justify-content:center;margin-top:30px;min-height:58px;position:relative}
+</style>
+</head>
+<body>
+
+<section id="quiz" class="screen active">
+  <div class="card">
+    <div class="heart">❤️</div>
+    <div class="progress" id="progress">Question 1 of 10</div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next" id="next">Next ❤️</button>
+  </div>
+</section>
+
+<section id="loveQuestion" class="screen">
+  <div class="card">
+    <div class="heart">💖</div>
+    <h1>Do you love Ashish...??</h1>
+    <p>There is only one very important question today. Choose wisely. 😌</p>
+    <div class="final-buttons">
+      <button id="yes">YES ❤️</button>
+      <button id="no">NO 😜</button>
+    </div>
+  </div>
+</section>
+
+<section id="answer" class="screen">
+  <div class="card">
+    <div class="heart">💖</div>
+    <div class="message">
+      I LOVE YOU TOO MUCH<br>
+      MERI DULHANIYA,<br>
+      MERI JAAN, MERI RANI,<br>
+      MERA BABU.... ❤️
+    </div>
+    <p class="sub">You just made this little surprise very happy. 🥰</p>
+  </div>
+</section>
+
+<script>
+const questions = [
+  {q:"Who is Ashish?", options:["Special person ❤️","I don't know"], answer:0},
+  {q:"How much you know me?", options:["50%","100% ❤️","I don't know"], answer:1},
+  {q:"Do you like me?", options:["Yes ❤️","No","I don't like you"], answer:0},
+  {q:"Why do you like me?", options:["For loyalty ❤️","For love and care 🥰","Both A and B 💖","I don't like you"], answer:2},
+  {q:"How much do you love me?", options:["Very much","Very very much","Too much 💖","Not at all"], answer:2},
+  {q:"What is my favourite colour?", options:["Red","Navy blue 💙","Dark brown","I don't know"], answer:1},
+  {q:"Do you know how much I love you?", options:["50%","100%","♾️","Don't know"], answer:2},
+  {q:"What I want to do with you?", options:["Hug you 🫂","Kiss you","Marriage 💍","Everything ❤️"], answer:3},
+  {q:"Do you love me?", options:["Yes ❤️","Maybe yes","No","Never"], answer:0},
+  {q:"Will you marry me (RUPAM) 💞?", options:["Yes","Absolutely 💍","No"], answer:1}
+];
+
+let current=0, answered=false;
+const quiz=document.getElementById("quiz");
+const loveQuestion=document.getElementById("loveQuestion");
+const answer=document.getElementById("answer");
+const questionEl=document.getElementById("question");
+const optionsEl=document.getElementById("options");
+const progressEl=document.getElementById("progress");
+const feedbackEl=document.getElementById("feedback");
+const nextBtn=document.getElementById("next");
+
+function showQuestion(){
+  answered=false;
+  feedbackEl.textContent="";
+  nextBtn.style.display="none";
+  progressEl.textContent=`Question ${current+1} of ${questions.length}`;
+  questionEl.textContent=questions[current].q;
+  optionsEl.innerHTML="";
+  questions[current].options.forEach((text,index)=>{
+    const btn=document.createElement("button");
+    btn.className="option";
+    btn.textContent=`${String.fromCharCode(65+index)}. ${text}`;
+    btn.onclick=()=>selectAnswer(index,btn);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(index,btn){
+  if(answered)return;
+  const correct=questions[current].answer;
+  if(index!==correct){
+    btn.classList.add("wrong");
+    feedbackEl.textContent="Try again 😜";
+    setTimeout(()=>btn.classList.remove("wrong"),500);
+    return;
+  }
+  answered=true;
+  btn.classList.add("correct");
+  feedbackEl.textContent="Correct! ❤️";
+  [...optionsEl.children].forEach(b=>b.disabled=true);
+  nextBtn.textContent=current<questions.length-1?"Next ❤️":"Final Question 💖";
+  nextBtn.style.display="block";
+}
+
+nextBtn.onclick=()=>{
+  if(current<questions.length-1){ current++; showQuestion(); }
+  else { quiz.classList.remove("active"); loveQuestion.classList.add("active"); }
+};
+
+document.getElementById("yes").onclick=()=>{
+  loveQuestion.classList.remove("active");
+  answer.classList.add("active");
+  for(let i=0;i<35;i++) setTimeout(createHeart,i*70);
+};
+
+document.getElementById("no").addEventListener("mouseenter",moveNo);
+document.getElementById("no").addEventListener("touchstart",moveNo,{passive:true});
+
+function moveNo(){
+  const x=Math.random()*180-90, y=Math.random()*90-45;
+  document.getElementById("no").style.transform=`translate(${x}px,${y}px)`;
+}
+
+function createHeart(){
+  const h=document.createElement("div");
+  h.className="floating-heart";
+  h.textContent=["❤️","💕","💖","💗","💓"][Math.floor(Math.random()*5)];
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(3+Math.random()*4)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+}
+
+showQuestion();
+</script>
+</body>
+</html>
